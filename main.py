@@ -1,3 +1,4 @@
+
 from __future__ import print_function
 import tensorflow as tf
 import numpy as np
@@ -7,6 +8,8 @@ from tensorflow.python.client import device_lib
 from scipy.io import wavfile
 from data_loader import pre_emph
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 devices = device_lib.list_local_devices()
 
@@ -77,7 +80,7 @@ def main(_):
     config.allow_soft_placement=True
     udevices = []
     for device in devices:
-        if len(devices) > 1 and 'cpu' in device.name:
+        if len(devices) > 1 and 'CPU' in device.name:
             # Use cpu only when we dont have gpus
             continue
         print('Using device: ', device.name)
@@ -112,10 +115,13 @@ def main(_):
             print('test wave min:{}  max:{}'.format(np.min(wave), np.max(wave)))
             c_wave = se_model.clean(wave)
             print('c wave min:{}  max:{}'.format(np.min(c_wave), np.max(c_wave)))
-            wavfile.write(os.path.join(FLAGS.save_clean_path, wavname), 16e3, c_wave)
+            save_wav = os.path.join(FLAGS.save_clean_path, wavname)
+            save_dir = os.path.dirname(save_wav)
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            wavfile.write(save_wav, 16000, c_wave)
             print('Done cleaning {} and saved '
-                  'to {}'.format(FLAGS.test_wav,
-                                 os.path.join(FLAGS.save_clean_path, wavname)))
+                  'to {}'.format(FLAGS.test_wav, save_wav))
 
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ This model deals with raw speech waveforms on many noise conditions at different
 ### Dependencies
 
 * Python 2.7
-* TensorFlow 0.12
+* TensorFlow 1.6+
 
 You can install the requirements either to your virtualenv or the system via pip with:
 
@@ -70,8 +70,8 @@ Then the `main.py` script has the option to process a wav file through the G net
 
 ```
 CUDA_VISIBLE_DEVICES="" python main.py --init_noise_std 0. --save_path segan_v1.1 \
-                                       --batch_size 100 --g_nl prelu --weights SEGAN_full \
-                                       --test_wav <wav_filename> --clean_save_path <clean_save_dirpath>
+                                       --batch_size 100 --g_nl prelu --weights SEGAN-41700 \
+                                       --test_wav test.wav --clean_save_path <clean_save_dirpath>
 ```
 
 To make things easy, there is a bash script called `clean_wav.sh` that accepts as input argument the test filename and
